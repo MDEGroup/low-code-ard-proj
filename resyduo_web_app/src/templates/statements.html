@@ -1,0 +1,368 @@
+<!--------------------------------
+    
+    
+    Singles Statements Examples
+
+
+------------------------------->>
+!--CARD Statements-->
+<div id="codeSection">
+
+    <div class="card text-bg-secondary mb-3">
+        <div class="card-header">
+            <h5>For iterator</h5>
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">From</h5>
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="int i = 0" aria-label="Variable"
+                    aria-describedby="basic-addon2">
+                <div class="input-group-append">
+                    <span class="input-group-text" id="basic-addon2">Variable</span>
+                </div>
+            </div>
+            <h5 class="card-title">To</h5>
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="100" aria-label="Variable"
+                    aria-describedby="basic-addon2">
+                <div class="input-group-append">
+                    <span class="input-group-text" id="basic-addon2">Variable</span>
+                </div>
+            </div>
+            <h5 class="card-title">Nest Statement</h5>
+            <div class="input-group mb-3">
+                <select class="form-select" id="inputGroupSelectLibrariesTab1">
+                    <option selected>for</option>
+                    <option value="switch">switch</option>
+                    <option value="if">if</option>
+                    <option value="method">method</option>
+                    <option value="variable">method</option>
+                </select>
+                <label class="input-group-text" for="inputGroupSelectLibrariesTab1"
+                    onclick="addLabel(this.htmlFor,'tab1LibrariesLabelContainer')">Add</label>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="card text-bg-secondary mb-3">
+        <div class="card-header">
+            <h5>Variable Declaration</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col">
+                    <div class="input-group mb-3">
+                        <select class="form-select" id="inputGroupSelectLibrariesTab1">
+                            <option selected value="int">int</option>
+                            <option value="char">char</option>
+                            <option value="long">long</option>
+                            <option value="float">float</option>
+                            <option value="variable">double</option>
+                        </select>
+                        <label class="input-group-text" for="inputGroupSelectLibrariesTab1">Type</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="x" aria-label="Variable"
+                            aria-describedby="basic-addon2">
+                        <div class="input-group-append">
+                            <span class="input-group-text" id="basic-addon2">id</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="0" aria-label="Variable"
+                            aria-describedby="basic-addon2">
+                        <div class="input-group-append">
+                            <span class="input-group-text" id="basic-addon2">Val
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!----------------------
+    
+             CARD
+
+--------------------------------->
+
+
+    <div class="card bg-light mb-3" id="variableDeclaration">
+        <div class="card-header">
+            <h5>Name</h5>
+        </div>
+        <div class="card-body">
+        </div>
+    </div>
+
+    <!----------------------
+    
+             CARD END
+
+--------------------------------->
+
+    <div class="card text-bg-warning mb-3">
+        <div class="card-header">
+            <h5>Switch</h5>
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">Add Case</h5>
+            <form class="row g-3">
+                <div class="col-auto">
+                    <label for="input-add-switch-var" class="visually-hidden">Var Value</label>
+                    <input type="text" class="form-control" id="input-add-switch-var" placeholder="Var Value">
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary mb-3">Add</button>
+                </div>
+            </form>
+            <p class="card-text">Some quick example text to build on the card title and make up the
+                bulk of the card's content.</p>
+            <div class="row">
+                <div class="col">
+                    <div class="card text-bg-success mb-3">
+                        <div class="card-header">
+                            <h5>Case 1</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <form class="row g-3">
+                                        <div class="col-auto">
+                                            <input class="form-control" list="datalistOptions" id="exampleDataList"
+                                                placeholder="Nest Statement">
+                                            <datalist id="datalistOptions">
+                                                <option value="for">
+                                                <option value="if">
+                                                <option value="while">
+                                            </datalist>
+                                        </div>
+                                        <div class="col-auto">
+                                            <button type="submit" class="btn btn-primary mb-3">Add</button>
+                                        </div>
+                                    </form>
+
+                                </div>
+                            </div>
+                            <h5 class="card-title">Success card title</h5>
+                            <p class="card-text">Some quick example text to build on the card title
+                                and make up the bulk of the card's content.</p>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+<!-------------------
+    
+    
+    NEST EXAMPLES
+
+
+--------------------->>
+<div class="card text-bg-warning mb-3">
+    <div class="card-header">
+        <h5>Switch</h5>
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">Add Case</h5>
+        <form class="row g-3">
+            <div class="col-auto">
+                <label for="input-add-switch-var" class="visually-hidden">Var Value</label>
+                <input type="text" class="form-control" id="input-add-switch-var" placeholder="Var Value">
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary mb-3">Add</button>
+            </div>
+        </form>
+        <p class="card-text">Some quick example text to build on the card title and make up the
+            bulk of the card's content.</p>
+        <div class="row">
+            <div class="col">
+                <div class="card text-bg-success mb-3">
+                    <div class="card-header">
+                        <h5>Case 1</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <form class="row g-3">
+                                    <div class="col-auto">
+                                        <input class="form-control" list="datalistOptions" id="exampleDataList"
+                                            placeholder="Nest Statement">
+                                        <datalist id="datalistOptions">
+                                            <option value="for">
+                                            <option value="if">
+                                            <option value="while">
+                                        </datalist>
+                                    </div>
+                                    <div class="col-auto">
+                                        <button type="submit" class="btn btn-primary mb-3">Add</button>
+                                    </div>
+                                </form>
+
+                            </div>
+                        </div>
+                        <h5 class="card-title">Success card title</h5>
+                        <p class="card-text">Some quick example text to build on the card title
+                            and make up the bulk of the card's content.</p>
+
+                        <div class="row">
+                            <div class="col">
+                                <div class="card text-bg-secondary mb-3">
+                                    <div class="card-header">
+                                        <h5>For</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col">
+                                                <form class="row g-3">
+                                                    <div class="col-auto">
+                                                        <input class="form-control" list="datalistOptions"
+                                                            id="exampleDataList" placeholder="Nest Statement">
+                                                        <datalist id="datalistOptions">
+                                                            <option value="for">
+                                                            <option value="if">
+                                                            <option value="while">
+                                                        </datalist>
+                                                    </div>
+                                                    <div class="col-auto">
+                                                        <button type="submit" class="btn btn-primary mb-3">Add</button>
+                                                    </div>
+                                                </form>
+
+                                            </div>
+                                        </div>
+                                        <h5 class="card-title">Success card title</h5>
+                                        <p class="card-text">Some quick example text to build on
+                                            the card title
+                                            and make up the bulk of the card's content.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="card text-bg-success mb-3">
+                    <div class="card-header">
+                        <h5>Case 2</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <form class="row g-3">
+                                    <div class="col-auto">
+                                        <input class="form-control" list="datalistOptions" id="exampleDataList"
+                                            placeholder="Nest Statement">
+                                        <datalist id="datalistOptions">
+                                            <option value="for">
+                                            <option value="if">
+                                            <option value="while">
+                                        </datalist>
+                                    </div>
+                                    <div class="col-auto">
+                                        <button type="submit" class="btn btn-primary mb-3">Add</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <h5 class="card-title">Success card title</h5>
+                        <p class="card-text">Some quick example text to build on the card title
+                            and make up the bulk of the card's content.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!----------------------
+
+switch
+
+----------------------->
+
+
+<div class="row">
+    <div class="col">
+        <div class="row">
+            <div class="col">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="x" aria-label="Variable"
+                        aria-describedby="basic-addon2" id="variableId" value="x">
+                    <div class="input-group-append">
+                        <span class="input-group-text" id="basic-addon2">from</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="x" aria-label="Variable"
+                        aria-describedby="basic-addon2" id="forTo" value="y.length">
+                    <div class="input-group-append">
+                        <span class="input-group-text" id="basic-addon2">to</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="0" aria-label="Variable"
+                        aria-describedby="basic-addon2" id="forIncrement" value="i++">
+                    <div class="input-group-append">
+                        <span class="input-group-text" id="basic-addon2">increment
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <h5>Add State</h5>
+            <div class="input-group mb-3">
+                <select class="form-select" id="`+ selectUniqueId + `">
+                    <option value="for">for</option>
+                    <option value="switch" disabled>switch</option>
+                    <option value="if" disabled>if</option>
+                    <option value="method" disabled>method</option>
+                    <option value="variable" selected>variable</option>
+                </select>
+                <label class="input-group-text" for="`+ selectUniqueId + `"
+                    onclick="addStatementView(this.htmlFor,'`+ bodyId + `')">Add</label>
+            </div>
+        </div>
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username"
+                aria-describedby="basic-addon2">
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button">Button</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+        <button class="btn btn-primary btn-sm" type="submit" onclick="addStatementToCode('`+ bodyId + `')">Add
+            code</button>
+    </div>
+</div>

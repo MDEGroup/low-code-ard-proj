@@ -1,0 +1,386 @@
+//program lavet af Paw Johnsen
+
+//include the libraries
+#include <DS3231_Simple.h> //clock librarie 
+#include <FastLED.h>       //LED librarie
+
+DS3231_Simple Clock;
+
+//defining things
+#define DATA_PIN     7  //data pin for LED
+#define NUM_LEDS    120 //number of LED
+#define BRIGHTNESS  100 //brightness
+#define LENG 100        //lenght of an array to determin the brightness
+#define RES A0          //light sensor pin
+#define SOUNDINPUT A1   //microphone Pin
+#define SWITCH 2        //button Pin
+
+CRGBPalette16 currentPalette;
+TBlendType    currentBlending;
+
+extern CRGBPalette16 myRedWhiteBluePalette;
+extern const TProgmemPalette16 myRedWhiteBluePalette_p PROGMEM;
+
+CRGB leds[NUM_LEDS];
+
+/*
+   this array is containing bolcks of the segment[7] and the LED pr.
+   blocks[4]. this will later be filled with LED numbers.
+*/
+int sectionArray[7][4];
+
+/* this is arrays that contain the blocks that needs to be lit to show the number.
+*/
+int min1[2] = {0, 4};
+int min2[5] = {0, 1, 3, 5, 6};
+int min3[5] = {0, 1, 3, 4, 5};
+int min4[4] = {0, 2, 3, 4};
+int min5[5] = {1, 2, 3, 4, 5};
+int min6[6] = {1, 2, 3, 4, 5, 6};
+int min7[3] = {0, 1, 4};
+int min8[7] = {0, 1, 2, 3, 4, 5, 6};
+int min9[6] = {0, 1, 2, 3, 4, 5};
+int min0[6] = {0, 1, 2, 4, 5, 6};
+
+/* This struct will be used to calculate what LEDs that should turn on.
+   for instants, if block 0 is going to be lit, than that is LED number 0,1,2   and 3, that should be lit.
+*/
+struct calculatedArr {
+  int arrLeng = 0;
+  int holderArr[][4];
+} calArr;
+
+
+// defines what minut it is
+int minuteFirst;
+int minuteSecound;
+
+//defines what hours it is
+int hourFirst;
+int hourSecound;
+
+/*for this array to work it needed to be pre determint befor the program startet, therefor its difined here.
+*/
+int arr[LENG] = {
+  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+};
+
+// the average value of the photoresistor
+int gennemsnit = 0;
+
+
+/* soundInput er den variable der skal holde hvad lydstyrke der bliver læst
+   soundZero er den værdi som der bliver opfanget når der er stille.
+   Dette er fordi den læser imellem 0 og 1028 når der er 5v sat til.
+   soundBuffer er en tolerance værdi, som bruges så det nemmere at justere mikrofonen i virkeligheden.
+*/
+int soundInput = 0;
+int soundZero = 512;
+int soundBuffer = 3;
+int soundArr[20] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19};
+
+/*The next 4 values are for a debouncer, if ClockOrRock = true, then          "PartyModen" is running.
+*/
+int buttonPos = LOW;
+int lastButtonPos = LOW;
+
+unsigned long lastDebounceTimer = 0;
+unsigned long debounceDelay = 50;
+
+bool clockOrRock = false;
+
+void setup() {
+  delay( 3000 ); // safety delay
+
+  FastLED.addLeds<WS2811, DATA_PIN, RGB>(leds, NUM_LEDS); //STarts the LEDs
+  FastLED.setBrightness(  BRIGHTNESS ); //stes the brightness of the LEDs
+  FastLED.show(); //turn on LEDs
+
+  Serial.begin(9600);
+  Clock.begin(); 
+
+  pinMode(SWITCH, INPUT);
+
+  delay(100); //safety delay agian
+
+  //update the which LEDs belongs the what "block" in the segment
+  updateSections();
+}
+
+void loop() {
+
+  Debouncer(); // test if what ClockOrRock is
+
+  //if true clock will be showen
+  if (clockOrRock == true) {
+    findTimeAndShowTime(); //finds the time to be showen
+    fadeLight();           //finds the brightness of the clock
+  }
+  else {
+    // else partyMode Activate
+    CalculateSoundLevel();
+  }
+}
+
+void Debouncer() {
+  int reading = digitalRead(SWITCH); //what pos is the button
+
+  if (reading != lastButtonPos) {   //if not the same as last time
+    lastDebounceTimer = millis();   //than the old time is set to now
+  }
+  // test if there have past more than the debouncedelay
+  if ((millis() - lastDebounceTimer) > debounceDelay) {
+    if (reading != buttonPos) {  //test if the button pos have changed
+      buttonPos = reading;       //change the "old" pos to the "new" pos
+
+      if (buttonPos == HIGH) { //test if button is down
+        FastLED.clear();       //clear LEDs
+        delay(500);            
+        if (clockOrRock == false) {
+          clockOrRock = true;       
+        } else                      
+          clockOrRock = false;      
+      }
+    }
+  }
+  lastButtonPos = reading;
+}
+
+//CalculateSoundLevel(), calculates the light level(LEDs to be light)
+void CalculateSoundLevel() {
+  int tempVal;
+  int bigVal = 0;
+  int smallVal = 1000;
+  soundInput = analogRead(SOUNDINPUT);
+
+  for (int i = 0; i < 19; i++) {
+    tempVal = i + 1;
+    soundArr[i] = soundArr[tempVal];
+  }
+  soundArr[19] = analogRead(SOUNDINPUT);
+
+  for (int i = 0; i < 19; i++) {
+    if (bigVal < soundArr[i]) {
+      bigVal = soundArr[i];
+    }
+
+    if (smallVal > soundArr[i]) {
+      smallVal = soundArr[i];
+    }
+  }
+
+
+
+  if (soundInput >= 2) { //the light will only be lit if the sound is bigger than 1.
+    PartyMode(bigVal - smallVal); //turn Party Light on here.
+  }
+  else PartyMode(0); // turn lights off
+}
+
+// PartyMode fuction determins what lights should be lit.
+
+void PartyMode(int soundLevel) {
+  int rightSectionsToSee[2] = {1, 5}; //1,5 is the top and bottom block in a segment. witch is what should be lit.
+
+  fadeToBlackBy(leds, NUM_LEDS, 30); //turn lights off. smaller number faster turn off.
+
+  int ledsShow[2][4]; //holds the LEDs to be lit
+
+  for (int i = 0; i < 2; i++) {
+    for (int j = 0; j < 4; j++) {
+      ledsShow[i][j] = sectionArray[rightSectionsToSee[i]][j];
+    }
+  }
+
+  //this determins what color and what leds to be lit
+  for (int i = 0; i < soundLevel - soundBuffer; i++) {
+    if (i <= 3) { //first segment is green
+      leds[ledsShow[0][i]] = CRGB(100, 0, 0);
+      leds[ledsShow[1][i]] = CRGB(100, 0, 0);
+    }
+    else if (i >= 4 && i  <=  7) {//next segment is yellowish
+      leds[ledsShow[0][i - 4] + 28] = CRGB(100, 100, 0);
+      leds[ledsShow[1][i - 4] + 28] = CRGB(100, 100, 0);
+
+    }
+    else if (i >= 8 && i  <=  11) {//next segment is yellowish 
+      leds[ledsShow[0][i - 8] + 56] = CRGB(100, 100, 0);
+      leds[ledsShow[1][i - 8] + 56] = CRGB(100, 100, 0);
+    }
+    else if (i >= 12 && i <= 15) {//last segment is red
+      leds[ledsShow[0][i - 12] + 84] = CRGB(0, 100, 0);
+      leds[ledsShow[1][i - 12] + 84] = CRGB(0, 100, 0);
+    }
+  }
+  FastLED.setBrightness(254);
+  FastLED.show(); 
+}
+
+  //finds the time and then shows it
+
+void findTimeAndShowTime() {
+  DateTime MyDateAndTime;
+
+  //finds the time
+  MyDateAndTime = Clock.read();
+
+  //calculates the time in 4 vals.
+  minuteFirst = MyDateAndTime.Minute / 10;
+  minuteSecound = MyDateAndTime.Minute % 10;
+
+  hourFirst = MyDateAndTime.Hour / 10;
+  hourSecound = MyDateAndTime.Hour % 10;
+
+  //turns of all LEDs
+  FastLED.clear();
+  findNumber(minuteSecound , 0 , CRGB(0, 0, 250));
+  findNumber(minuteFirst , 28 , CRGB(0, 0, 250));
+  findNumber(hourSecound , 56 , CRGB(0, 0, 250));
+  findNumber(hourFirst , 84 , CRGB(0, 0, 250));
+
+  //turns them on with new vals.
+  FastLED.show();
+}
+
+
+//findes the number to be shown on the clock
+void findNumber(int digitToDisplay, int offset, CRGB color) {
+  switch (digitToDisplay) {
+
+    case 0: 
+      showNumber(min0, sizeof(min0) / sizeof(min0[0]), offset, color);
+      break;
+
+    case 1:
+      showNumber(min1, sizeof(min1) / sizeof(min1[0]), offset, color);
+      break;
+
+    case 2:
+      showNumber(min2, sizeof(min2) / sizeof(min2[0]), offset, color);
+      break;
+
+    case 3:
+      showNumber(min3, sizeof(min3) / sizeof(min3[0]), offset, color);
+      break;
+
+    case 4:
+      showNumber(min4, sizeof(min4) / sizeof(min4[0]), offset, color);
+      break;
+
+    case 5:
+      showNumber(min5, sizeof(min5) / sizeof(min5[0]), offset, color);
+      break;
+
+    case 6:
+      showNumber(min6, sizeof(min6) / sizeof(min6[0]), offset, color);
+      break;
+
+    case 7:
+      showNumber(min7, sizeof(min7) / sizeof(min7[0]), offset, color);
+      break;
+
+    case 8:
+      showNumber(min8, sizeof(min8) / sizeof(min8[0]), offset, color);
+      break;
+
+    case 9:
+      showNumber(min9, sizeof(min9) / sizeof(min9[0]), offset, color);
+      break;
+
+    default:
+      break;
+  }
+}
+  
+  //This funciton handles the LEDs, and will show what we want.
+void showNumber(int numArr[], int sizeArr, int offsetPos, CRGB colorToUse) {
+  calArr = whatNr(calArr, numArr, sizeArr);
+  // the struct is equal to the LEDs that will be shown, and the size of arr
+
+  //here we set the color of the diffrent LEDs that later will be lit.
+  for (int x = 0; x < calArr.arrLeng; x++) {
+    for (int y = 0; y < 4; y++) {
+      leds[calArr.holderArr[x][y] + offsetPos] = colorToUse;
+    }
+  }
+}
+
+/*this function will calculate wich LEDs in the segment that should be lit.    It makes it easier to modify too for example show letters or other things.
+*/
+struct calculatedArr whatNr(struct calculatedArr & cATemp,  int whatNumber[], int sizeOfArray) {
+
+  cATemp.arrLeng = sizeOfArray;
+
+  cATemp.holderArr[sizeOfArray][4];
+
+  //Finds LEDs to show given from whatNumber[]
+  for (int i = 0; i < sizeOfArray; i++) {
+    for (int j = 0; j < 4; j++) {
+      cATemp.holderArr[i][j] = sectionArray[whatNumber[i]][j];
+    }
+  }
+  return cATemp; //it returns the calculated leds.
+}
+
+//fading the lights to the room light
+void fadeLight() {
+  int temp = 0;
+
+// claculates the avrage(gennemsnit) from the photoresistor
+  for (int i = 0; i < LENG; i++) {
+    gennemsnit = gennemsnit + arr[i]; 
+    temp = i + 1;                     
+    arr[i] = arr[temp];               
+  }
+  arr[LENG] = analogRead(RES);
+
+  gennemsnit = gennemsnit / LENG; 
+
+  /*here we can change the brightness of the leds. this is what I need the for my room, change it to youre light level in the room
+  */
+  if (gennemsnit >= 101) {
+    gennemsnit *= 2;
+  }
+  else if (gennemsnit >= 51 && gennemsnit <= 100) {
+    gennemsnit *= 2.5;
+  }
+  else if (gennemsnit >= 21 && gennemsnit <= 50) {
+    gennemsnit *= 3;
+  }
+  else if (gennemsnit >= 5 && gennemsnit <= 20) {
+    gennemsnit *= 4;
+  }
+  else if (gennemsnit < 4) {
+    gennemsnit = 0;
+  }
+  if (gennemsnit > 255 ) {
+    gennemsnit = 255;
+  }
+
+  FastLED.setBrightness(gennemsnit);
+
+  //restes the avrage to 0.
+  gennemsnit = 0;
+}
+
+/*
+this tells the program where all the LEDs are placed, in wich block in segment, it works, but is alittle complicated
+*/
+void updateSections() {
+  for (int i = 0; i < 7; i++) {
+    for (int j = 0; j < 4; j++) {
+      if (i == 0) {
+        sectionArray[i][j] = j;
+      }
+      if (i > 0 && j == 0) {
+        sectionArray[i][j] = sectionArray[i - 1][j + 3] + 1;
+      } else if (i > 0 && j != 0) {
+        sectionArray[i][j] = sectionArray[i][j - 1] + 1;
+      }
+    }
+  }
+}

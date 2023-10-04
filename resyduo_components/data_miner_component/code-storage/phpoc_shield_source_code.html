@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>PHPoC Shield - Snake Game</title>
+<meta name="viewport" content="width=device-width, initial-scale=0.7, maximum-scale=0.7">
+<style>
+body { font-family: verdana, Helvetica, Arial, sans-serif, gulim; font-weight: bold; text-align: center; }
+h1 { font-size: 25pt; }
+h2 { font-size: 15pt; }
+#remote { margin:0 auto; width: 500px; background: #333; border-radius: 2%; }
+.direct { 
+	display: inline-block; width: 100px; height: 100px;  
+	font-size: 50px; color: white; line-height: 90px;
+	background: #eee; margin: 8px; border-radius: 10%;
+	text-align: center; font-weight: bold; 
+	margin: 10px 60px;
+}
+</style>
+<script>
+var ws;
+var button;
+	
+function init()
+{	
+	if(ws == null)
+	{
+		ws = new WebSocket("ws://<?echo _SERVER("HTTP_HOST")?>/snake", "text.phpoc");
+		document.getElementById("ws_state").innerHTML = "CONNECTING";
+		
+		ws.onopen = ws_onopen;
+		ws.onclose = ws_onclose;
+		ws.onmessage = ws_onmessage; 
+	}
+	else
+		ws.close();
+}
+function connect_onclick()
+{
+	if(ws == null)
+	{
+		var ws_host_addr = "<?echo _SERVER("HTTP_HOST")?>";
+		//var debug = document.getElementById("debug");
+
+		if((navigator.platform.indexOf("Win") != -1) && (ws_host_addr.charAt(0) == "["))
+		{
+			// network resource identifier to UNC path name conversion
+			ws_host_addr = ws_host_addr.replace(/[\[\]]/g, '');
+			ws_host_addr = ws_host_addr.replace(/:/g, "-");
+			ws_host_addr += ".ipv6-literal.net";
+		}
+
+		//debug.innerHTML = "<br>" + navigator.platform + " " + ws_host_addr;
+		ws = new WebSocket("ws://" + ws_host_addr + "/snake", "text.phpoc");
+
+		document.getElementById("ws_state").innerHTML = "CONNECTING";
+
+		ws.onopen = ws_onopen;
+		ws.onclose = ws_onclose;
+		ws.onmessage = ws_onmessage;
+	}
+	else
+		ws.close();
+}
+function ws_onopen()
+{
+	document.getElementById("ws_state").innerHTML = "<font color='blue'>CONNECTED</font>";
+	document.getElementById("bt_connect").innerHTML = "Disconnect";
+}
+function ws_onclose()
+{
+	document.getElementById("ws_state").innerHTML = "<font color='gray'>CLOSED</font>";
+	document.getElementById("bt_connect").innerHTML = "Connect";
+
+	ws.onopen = null;
+	ws.onclose = null;
+	ws.onmessage = null;
+	ws = null;
+}
+function ws_onmessage(e_msg)
+{
+	e_msg = e_msg || window.event; // MessageEvent
+
+	alert("msg : " + e_msg.data);
+}
+
+var beta = 0;
+var gamma = 0;
+var resolution = 2;
+ 
+if (window.DeviceOrientationEvent) 
+{
+    window.addEventListener('deviceorientation', orientationUpdate, true);
+}
+ 
+function orientationUpdate(event)
+{    
+
+    if(Math.abs((event.beta - beta)) > resolution)
+        beta = event.beta;
+ 
+    if(Math.abs((event.gamma - gamma)) > resolution)
+        gamma = event.gamma;
+    
+	//var debug = document.getElementById("debug");
+	//debug.innerHTML = beta + "/" + gamma;
+	
+	for (i=0; i<4; i++)
+	{
+		button = document.getElementById(i);
+		button.style.backgroundColor = "grey";			
+	}
+
+	if (beta < 0) // top 
+	{		
+		button = document.getElementById(0);
+		button.style.backgroundColor = "#E9FF26";
+    	ws.send("0");
+	}
+	else if (gamma < -35 && beta < 50) // left
+	{		
+		button = document.getElementById(1);
+		button.style.backgroundColor = "#E9FF26";
+   	 	ws.send("1");
+	}
+    else if (gamma > 35 && beta < 50) // right
+    {
+		button = document.getElementById(2);
+		button.style.backgroundColor = "#E9FF26";
+    	ws.send("2");
+	}
+   	else if (beta > 60) // bottom
+   	{
+		button = document.getElementById(3);
+		button.style.backgroundColor = "#E9FF26";
+    	ws.send("3");	
+	} 
+	
+}
+window.onload = init;
+</script>
+</head>
+<body>
+<h1>Snake Game</h1>
+<br /><br />
+<div id="remote">
+<div class="direct" id="0">↑</div><br />
+<div class="direct" id="1">←</div>
+<div class="direct" id="2">→</div><br />
+<div class="direct" id="3">↓</div>
+</div>
+<br /><br />
+<h2>WebSocket <font id="ws_state" color="gray">CLOSED</font></h2>
+<button id="bt_connect" type="button" onclick="connect_onclick();">Connect</button>
+<span id="debug"></span>
+</body>
+</html>

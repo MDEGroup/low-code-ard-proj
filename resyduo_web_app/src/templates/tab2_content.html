@@ -1,0 +1,47 @@
+<div class="row">
+    <div class="col">
+
+
+            <!--Start Components Recommendation -->
+            <div id="tab2ComponentSection" class="row mt-3">
+                <h2>Select Components</h2>
+                <div class="row mt-3">
+                    <div class="input-group mb-3">
+                        <select class="form-select" id="inputGroupSelectComponentTab2">
+                            {% for i in all_components %}
+                            <option value='{{i}}'>{{i}}</option>
+                            {% endfor %}
+                        </select>
+                        <label class="input-group-text" for="inputGroupSelectComponentTab2"
+                            onclick="addLabel(this.htmlFor,'tab2ComponentLabelContainer')">Add</label>
+                    </div>
+                </div>
+                <div class="d-grid gap-2 d-md-block" id='tab2ComponentLabelContainer'>
+                </div>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <button class="btn btn-primary btn-sm" type="submit"
+                        onclick="generate_recommended_libraries('tab2ComponentLabelContainer','tab2LibrariesSection','inputGroupSelectLibrariesTab2')">Generate
+                        Libraries</button>
+                </div>
+            </div>
+
+            <!--Start Lib Recommendation -->
+            <div id="tab2LibrariesSection" class="row mt-3 visually-hidden">
+                <h2>Recommended Libraries</h2>
+                <div class="row mt-3">
+                    <div class="input-group mb-3">
+                        <select class="form-select" id="inputGroupSelectLibrariesTab2">
+                        </select>
+                        <label class="input-group-text" for="inputGroupSelectLibrariesTab2"
+                            onclick="addLabel(this.htmlFor,'tab2LibrariesLabelContainer')">Add</label>
+                    </div>
+                </div>
+                <div class="d-grid gap-2 d-md-block" id='tab2LibrariesLabelContainer'>
+                </div>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <button class="btn btn-primary btn-sm" type="submit"
+                        onclick="addLibrariesToCode('tab2LibrariesLabelContainer')">Add Libraries</button>
+                </div>
+            </div>
+        </div>
+    </div>

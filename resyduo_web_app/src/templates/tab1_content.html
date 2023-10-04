@@ -1,0 +1,64 @@
+<div class="row">
+    <div class="col">
+        <div class="row mt-3">
+            <h2>Select Tags</h2>
+            <div class="input-group mb-3">
+                <select class="form-select" id="inputGroupSelectTagTab1">
+                    <option selected>Select Tags</option>
+                    {% for i in all_tags %}
+                    <option value='{{i}}'>{{i}}</option>
+                    {% endfor %}
+                </select>
+                <label class="input-group-text" for="inputGroupSelectTagTab1"
+                    onclick="addLabel(this.htmlFor,'tab1TagLabelContainer')">Add</label>
+            </div>
+        </div>
+        <div class="d-grid gap-2 d-md-block" id='tab1TagLabelContainer'>
+        </div>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <button class="btn btn-primary btn-sm" type="submit"
+                onclick="generate_recommended_components('tab1TagLabelContainer')">Generate Components</button>
+        </div>
+
+
+        <!--Start Components Recommendation -->
+        <div id="tab1ComponentSection" class="row mt-3 visually-hidden">
+            <h2>Recommended Components</h2>
+            <div class="row mt-3">
+                <div class="input-group mb-3">
+                    <select class="form-select" id="inputGroupSelectComponentTab1">
+                        <option selected>Select Components</option>
+                    </select>
+                    <label class="input-group-text" for="inputGroupSelectComponentTab1"
+                        onclick="addLabel(this.htmlFor,'tab1ComponentLabelContainer')">Add</label>
+                </div>
+            </div>
+            <div class="d-grid gap-2 d-md-block" id='tab1ComponentLabelContainer'>
+            </div>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <button class="btn btn-primary btn-sm" type="submit"
+                    onclick="generate_recommended_libraries('tab1ComponentLabelContainer','tab1LibrariesSection','inputGroupSelectLibrariesTab1')">Generate Libraries</button>
+            </div>
+        </div>
+
+            <!--Start Lib Recommendation -->
+            <div id="tab1LibrariesSection" class="row mt-3 visually-hidden">
+                <h2>Recommended Libraries</h2>
+                <div class="row mt-3">
+                    <div class="input-group mb-3">
+                        <select class="form-select" id="inputGroupSelectLibrariesTab1">
+                            <option selected>Select Library</option>
+                        </select>
+                        <label class="input-group-text" for="inputGroupSelectLibrariesTab1"
+                            onclick="addLabel(this.htmlFor,'tab1LibrariesLabelContainer')">Add</label>
+                    </div>
+                </div>
+                <div class="d-grid gap-2 d-md-block" id='tab1LibrariesLabelContainer'>
+                </div>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <button class="btn btn-primary btn-sm" type="submit"
+                        onclick="addLibrariesToCode('tab1LibrariesLabelContainer')">Add Libraries</button>
+                </div>
+            </div>
+        </div>
+    </div>

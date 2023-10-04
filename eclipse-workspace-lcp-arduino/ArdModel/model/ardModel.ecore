@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="ardModel" nsURI="http://www.example.org/ardModel" nsPrefix="ardModel">
+  <eClassifiers xsi:type="ecore:EClass" name="Scenario" eSuperTypes="#//Descripted">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="hardware" lowerBound="1"
+        eType="#//HardwareConfiguration"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="application" lowerBound="1"
+        eType="#//Application"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Application" eSuperTypes="#//Descripted">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="libraries" upperBound="-1"
+        eType="#//Library"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="HardwareConfiguration">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="board" lowerBound="1" eType="#//Board"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sensors" lowerBound="1"
+        upperBound="-1" eType="#//Sensor"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="actuators" lowerBound="1"
+        upperBound="-1" eType="#//Actuator"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="modules" upperBound="-1"
+        eType="#//HardwareModule"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Board" eSuperTypes="#//Descripted">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="connections" eType="#//Wifi"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pinList" upperBound="-1"
+        eType="#//Pin" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="powerSupplies" lowerBound="1"
+        upperBound="-1" eType="#//PowerSupply"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Pin" eSuperTypes="#//Descripted">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//PinType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="signalType" eType="#//SignalType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Actuator" eSuperTypes="#//Descripted">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="setupCode" lowerBound="1"
+        eType="#//SetupCode"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Sensor" eSuperTypes="#//Descripted">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="setupCode" lowerBound="1"
+        eType="#//SetupCode"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Connection" eSuperTypes="#//Descripted"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Wifi" eSuperTypes="#//Descripted">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hardwareModel" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Ethernet" eSuperTypes="#//Descripted"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Library" eSuperTypes="#//Descripted">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="includeCode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="HardwareModule">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="setupCode" lowerBound="1"
+        eType="#//SetupCode"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SetupCode">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="code" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PowerSupply"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Descripted">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="PinType">
+    <eLiterals name="INPUT" value="1"/>
+    <eLiterals name="OUTPUT"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="SignalType">
+    <eLiterals name="ANALOGIC"/>
+    <eLiterals name="DIGITAL" value="1"/>
+  </eClassifiers>
+</ecore:EPackage>

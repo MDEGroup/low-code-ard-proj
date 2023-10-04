@@ -1,0 +1,15 @@
+
+    <!--navbar-->
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="../static/img/Logo_Università_degli_Studi_dell'Aquila.gif" alt="R" width="30" height="30"
+                    class="d-inline-block align-text-top">
+                    {% if name %}
+    {{ name }}
+  {% else %}
+    Hello, World!
+  {% endif %}
+            </a>
+        </div>
+    </nav>

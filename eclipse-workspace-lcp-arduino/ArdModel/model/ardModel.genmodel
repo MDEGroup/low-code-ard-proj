@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/ArdModel/src" modelPluginID="ArdModel" modelName="ArdModel"
+    rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container" importerID="org.eclipse.emf.importer.ecore"
+    complianceLevel="5.0" copyrightFields="false" operationReflection="true" importOrganizing="true">
+  <foreignModel>ardModel.ecore</foreignModel>
+  <genPackages prefix="ArdModel" disposableProviderFactory="true" ecorePackage="ardModel.ecore#/">
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="ardModel.ecore#//PinType">
+      <genEnumLiterals ecoreEnumLiteral="ardModel.ecore#//PinType/INPUT"/>
+      <genEnumLiterals ecoreEnumLiteral="ardModel.ecore#//PinType/OUTPUT"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="ardModel.ecore#//SignalType">
+      <genEnumLiterals ecoreEnumLiteral="ardModel.ecore#//SignalType/ANALOGIC"/>
+      <genEnumLiterals ecoreEnumLiteral="ardModel.ecore#//SignalType/DIGITAL"/>
+    </genEnums>
+    <genClasses ecoreClass="ardModel.ecore#//Scenario">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference ardModel.ecore#//Scenario/hardware"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference ardModel.ecore#//Scenario/application"/>
+    </genClasses>
+    <genClasses ecoreClass="ardModel.ecore#//Application">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference ardModel.ecore#//Application/libraries"/>
+    </genClasses>
+    <genClasses ecoreClass="ardModel.ecore#//HardwareConfiguration">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference ardModel.ecore#//HardwareConfiguration/board"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference ardModel.ecore#//HardwareConfiguration/sensors"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference ardModel.ecore#//HardwareConfiguration/actuators"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference ardModel.ecore#//HardwareConfiguration/modules"/>
+    </genClasses>
+    <genClasses ecoreClass="ardModel.ecore#//Board">
+      <genFeatures createChild="false" ecoreFeature="ecore:EReference ardModel.ecore#//Board/connections"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ardModel.ecore#//Board/pinList"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference ardModel.ecore#//Board/powerSupplies"/>
+    </genClasses>
+    <genClasses ecoreClass="ardModel.ecore#//Pin">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ardModel.ecore#//Pin/type"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ardModel.ecore#//Pin/signalType"/>
+    </genClasses>
+    <genClasses ecoreClass="ardModel.ecore#//Actuator">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference ardModel.ecore#//Actuator/setupCode"/>
+    </genClasses>
+    <genClasses ecoreClass="ardModel.ecore#//Sensor">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference ardModel.ecore#//Sensor/setupCode"/>
+    </genClasses>
+    <genClasses ecoreClass="ardModel.ecore#//Connection"/>
+    <genClasses ecoreClass="ardModel.ecore#//Wifi">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ardModel.ecore#//Wifi/hardwareModel"/>
+    </genClasses>
+    <genClasses ecoreClass="ardModel.ecore#//Ethernet"/>
+    <genClasses ecoreClass="ardModel.ecore#//Library">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ardModel.ecore#//Library/includeCode"/>
+    </genClasses>
+    <genClasses ecoreClass="ardModel.ecore#//HardwareModule">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference ardModel.ecore#//HardwareModule/setupCode"/>
+    </genClasses>
+    <genClasses ecoreClass="ardModel.ecore#//SetupCode">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ardModel.ecore#//SetupCode/code"/>
+    </genClasses>
+    <genClasses ecoreClass="ardModel.ecore#//PowerSupply"/>
+    <genClasses ecoreClass="ardModel.ecore#//Descripted">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ardModel.ecore#//Descripted/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ardModel.ecore#//Descripted/description"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>
